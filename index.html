@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#356B5B">
+  <title>SyCOM · Atlas de pruebas semiológicas</title>
+  <meta name="description" content="Biblioteca interactiva de pruebas semiológicas para Semiología y clínica osteomuscular.">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="topbar">
+    <div class="container">
+      <span>Universidad CES · Programa de Fisioterapia</span>
+      <span>Recurso académico · Semiología y clínica osteomuscular</span>
+    </div>
+  </div>
+
+  <header class="hero">
+    <div class="container">
+      <div class="brandline">
+        <div class="logo">SyCOM</div>
+        <div><strong>Atlas de pruebas semiológicas</strong><span>Explora · relaciona · aplica</span></div>
+      </div>
+      <div class="hero-grid">
+        <div>
+          <h1>Encuentra la prueba que necesitas.</h1>
+          <p>Busca por nombre, región, patología o estructura. Revisa el procedimiento, interpreta el resultado y consulta sus valores de sensibilidad y especificidad.</p>
+        </div>
+        <div class="hero-card">
+          <div class="big"><span id="totalTests">0</span> pruebas</div>
+          <small>en <span id="totalRegions">0</span> regiones clínicas · versión inicial</small>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="search-shell" aria-label="Búsqueda">
+      <div class="search-row">
+        <div class="searchbox">
+          <span class="search-icon">⌕</span>
+          <input id="searchInput" type="search" placeholder="Ej. Lachman, LCA, hombro, radiculopatía..." autocomplete="off">
+        </div>
+        <button class="info-btn" id="infoBtn">¿Sensibilidad y especificidad?</button>
+      </div>
+      <div id="glossary" class="glossary">
+        <strong>Sensibilidad:</strong> probabilidad de que la prueba sea positiva cuando la condición está presente.
+        <strong> Especificidad:</strong> probabilidad de que la prueba sea negativa cuando la condición no está presente.
+        Estos valores deben interpretarse junto con la historia clínica y el resto del examen.
+      </div>
+    </section>
+
+    <section class="filter-wrap">
+      <div class="section-title"><h2>Explorar por región</h2><span>Atajo: presiona <span class="kbd">/</span> para buscar</span></div>
+      <div id="regionChips" class="chips"></div>
+    </section>
+
+    <section class="layout">
+      <aside class="sidebar">
+        <div class="section-title"><h2>Patologías</h2></div>
+        <div id="pathList" class="path-list"></div>
+        <div style="border-top:1px solid var(--line);margin:14px 0"></div>
+        <button class="path-btn" id="favBtn">☆ Mis favoritas</button>
+        <button class="path-btn" id="clearBtn">↺ Limpiar filtros</button>
+      </aside>
+
+      <section>
+        <div class="results-head">
+          <strong>Biblioteca clínica</strong>
+          <span id="resultCount"></span>
+        </div>
+        <div id="cards" class="grid"></div>
+      </section>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <strong>SyCOM · Semiología y clínica osteomuscular</strong><br>
+      Recurso académico de consulta. Los valores de sensibilidad y especificidad de esta versión se transcriben de las diapositivas de la asignatura y deben interpretarse dentro del razonamiento clínico.
+    </div>
+  </footer>
+
+  <div class="modal" id="testModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <article class="modal-card">
+      <header class="modal-head">
+        <div class="modal-headline">
+          <div>
+            <span class="region-badge" id="modalRegion"></span>
+            <h2 id="modalTitle"></h2>
+            <div class="pathology" id="modalPath"></div>
+          </div>
+          <button class="close" id="closeModal" aria-label="Cerrar">×</button>
+        </div>
+      </header>
+      <div class="modal-body">
+        <div class="detail-grid">
+          <div class="detail-box"><small>Estructura / objetivo</small><strong id="modalStructure"></strong></div>
+          <div class="detail-box"><small>Condición clínica</small><strong id="modalPath2">Interpretación semiológica</strong></div>
+        </div>
+
+        <div class="metric-row">
+          <div class="metric-panel">
+            <small>Sensibilidad</small><div class="value" id="sensValue"></div>
+            <div class="bar"><span id="sensBar"></span></div>
+          </div>
+          <div class="metric-panel">
+            <small>Especificidad</small><div class="value" id="specValue"></div>
+            <div class="bar"><span id="specBar"></span></div>
+          </div>
+        </div>
+
+        <div class="detail-section"><h4>Cómo realizarla</h4><p id="modalProcedure"></p></div>
+        <div class="detail-section"><h4>Resultado positivo</h4><p id="modalPositive"></p></div>
+        <div class="detail-section"><h4>Interpretación</h4><p id="modalInterpretation"></p></div>
+
+        <div class="actions">
+          <a id="videoLink" class="action primary" target="_blank" rel="noopener">▶ Ver demostración</a>
+          <button id="shareBtn" class="action">⤴ Compartir prueba</button>
+          <button id="infoModalBtn" class="action">ⓘ Cómo leer Sn/Sp</button>
+        </div>
+        <div id="modalGlossary" class="glossary">
+          Una prueba con <strong>alta sensibilidad</strong> ayuda especialmente cuando buscamos reducir falsos negativos.
+          Una prueba con <strong>alta especificidad</strong> ayuda especialmente cuando buscamos reducir falsos positivos.
+          Ninguna prueba debe interpretarse de forma aislada.
+        </div>
+        <div class="disclaimer"><strong>Nota académica:</strong> esta herramienta facilita la consulta y el estudio; no sustituye la anamnesis, la integración de signos y síntomas ni el razonamiento clínico.</div>
+      </div>
+    </article>
+  </div>
+
+  <script src="data/pruebas.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
